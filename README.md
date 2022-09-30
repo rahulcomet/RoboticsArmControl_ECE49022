@@ -6,12 +6,19 @@ This is a program designed to be run on the Raspberry Pi Compute Module 4. It's 
 ## Libraries used (or might be used):
 
 json
+
 socket
+
 sys
+
 time
+
 threading
+
 multiprocessing
+
 RPi.GPIO
+
 adafruit_servokit
 
 ## Packages to be installed:
