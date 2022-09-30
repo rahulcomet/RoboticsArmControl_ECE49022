@@ -1,0 +1,119 @@
+import json                                         
+import socket
+import sys
+import time
+import threading
+from multiprocessing import Process
+import RPi.GPIO as GPIO
+from adafruit_servokit import ServoKit
+                   
+#Global Control Variables 
+rst = 0
+stop = 0 
+
+#Global variables storing reset angle values for each servo
+angle_rst_claw_OC = 0
+angle_rst_claw_rotate = 0
+angle_rst_ext1 = 0
+angle_rst_ext2 = 0
+angle_rst_ext3 = 0
+angle_rst_sweep = 0
+
+#Connecting the servos to the PWM driver channels   
+kit = ServoKit(channels = 16)   
+GPIO.setmode(GPIO.BCM)          
+GPIO.setup(4, GPIO.IN)           
+
+#Sample json string to represent possible instruction format
+dummy_json = {  'X': 0,
+                'Y': 0,
+                'Z': 0,
+                'OC': 0,
+                'Stop': 0,
+                'Reset': 0,
+                'Rotate': 0,         
+             }   
+             
+#Function to control servo responsible for opening and closing the claw based on pressure sensor signal
+def servo_claw_OC():
+#Multiprocessing/Threading might be required for the two loops to run simultaneously
+    read_sensor() 
+    for i in range (0, 180):
+        if stop == 0 and rst == 0:
+            kit.servo[0].angle = i + angle_rst_claw_OC
+            time.sleep(0.5)
+            read_sensor()
+
+#Function to control servo responsible for rotation of the claw in the yz plane
+def servo_claw_rotate(orientation):
+    if orientation == 0:
+        kit.servo[1].angle = angle_rst_claw_rotate
+    else:
+        kit.servo[1].angle = 90
+
+#Three functions [servo_ext(1-3)] to control the three servos responsible for arm extension in the xz plane
+def servo_ext1():
+    pass
+
+def servo_ext2():                                                          
+    pass
+
+def servo4_ext3():
+    pass
+
+#Function to control the servo responsible for arm sweep in the xy plane
+def servo_sweep():
+    for i in range (0, 180):
+        if stop == 0 and rst == 0:
+            kit.servo[5].angle = i + angle_rst_sweep
+            time.sleep(0.5)
+
+#Function to reset all servos to default positions
+def reset():
+    kit.servo[0].angle = angle_rst_claw_OC
+    kit.servo[1].angle = angle_rst_claw_rotate
+    kit.servo[2].angle = angle_rst_ext1
+    kit.servo[3].angle = angle_rst_ext1
+    kit.servo[4].angle = angle_rst_ext3
+    kit.servo[5].angle = angle_rst_sweep
+
+#Function to read digital (via ADC) sensor data 
+def read_sensor():
+    prev_input = 0
+    while True:
+        input = GPIO.input(4)
+        if(not prev_input and input):
+            break
+        prev_input = input
+        time.sleep(0.1)
+    GPIO.cleanup()
+
+#Function to read linear instructions via ethernet as json and pass it to the instrusction processing function
+def ReadProcess_ethernet():
+    #Read json via ethernet using socket programming (RPi as client) - TBD
+    data_json = 0
+    instruction_processing(data_json)
+
+#Main driver function to control the individual servo functions and to process the json instructions into specific servo instructions based on keys
+def instruction_processing(js_inst):
+    dict_instr = json.loads(js_inst)
+    global stop, rst
+    stop = dict_instr["Stop"]
+    rst = dict_instr["Reset"]
+
+    servo_claw_rotate(dict_instr["Rotate"])
+    if dict_instr["OC"] == 1:
+        servo_claw_OC()
+    elif dict_instr["Y"] == 1:
+        servo_sweep()
+    elif dict_instr["Reset"] == 1:
+        reset()
+    else:
+        pass
+
+#Program runs infinitely unless interrupted
+try:
+    while True:
+        ReadProcess_ethernet()
+except KeyboardInterrupt:
+    print("Program Interrupted!", end='', flush=True)
