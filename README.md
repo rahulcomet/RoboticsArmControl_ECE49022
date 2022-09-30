@@ -25,11 +25,13 @@ This is a program designed to be run on the Raspberry Pi Compute Module 4. It's 
 
 Adafruit_blinka:
 ```python 
-pip3 install Adafruit-Blinka```
+pip3 install Adafruit-Blinka
+```
 
 Adafruit_CircuitPython_ServoKit:
 ```python
-sudo pip3 install adafruit-circuitpython-servokit```
+sudo pip3 install adafruit-circuitpython-servokit
+```
 
 
 ## Subsystem Block Diagram:
