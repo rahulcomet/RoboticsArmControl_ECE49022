@@ -5,29 +5,31 @@ This is a program designed to be run on the Raspberry Pi Compute Module 4. It's 
 
 ## Libraries used (or might be used):
 
-json
+1. json
 
-socket
+2. socket
 
-sys
+3. sys
 
-time
+4. time
 
-threading
+5. threading
 
-multiprocessing
+6. multiprocessing
 
-RPi.GPIO
+7. RPi.GPIO
 
-adafruit_servokit
+8. adafruit_servokit
 
 ## Packages to be installed:
 
 Adafruit_blinka:
-pip3 install Adafruit-Blinka
+```python 
+pip3 install Adafruit-Blinka```
 
 Adafruit_CircuitPython_ServoKit:
-sudo pip3 install adafruit-circuitpython-servokit
+```python
+sudo pip3 install adafruit-circuitpython-servokit```
 
 
 ## Subsystem Block Diagram:
