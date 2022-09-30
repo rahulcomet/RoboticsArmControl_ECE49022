@@ -1,5 +1,6 @@
 # RoboticsArmControl_ECE49022
 Robotics Arm Control Subsystem for ECE 49022 Senior Design Project (Team 41: Arm.io).
+
 This is a program designed to be run on the Raspberry Pi Compute Module 4. It's primary function is to read the linear instreuctions received via ethernet and process them into servo motor instrucitons which it implements. 
 
 ## Subsystem Block Diagram:
