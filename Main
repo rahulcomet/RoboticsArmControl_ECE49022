@@ -21,8 +21,9 @@ angle_rst_sweep = 0
 
 #Connecting the servos to the PWM driver channels   
 kit = ServoKit(channels = 16)   
-GPIO.setmode(GPIO.BCM)          
-GPIO.setup(4, GPIO.IN)           
+
+#GPIO.setmode(GPIO.BCM)          
+#GPIO.setup(4, GPIO.IN)           
 
 #Sample json string to represent possible instruction format
 dummy_json = {  'X': 0,
@@ -117,3 +118,4 @@ try:
         ReadProcess_ethernet()
 except KeyboardInterrupt:
     print("Program Interrupted!", end='', flush=True)
+    GPIO.cleanup()
