@@ -1,0 +1,18 @@
+import time
+import board
+import pmwio
+
+import RPi.GPIO as GPIO
+
+from adafruit_motor import servo
+
+from gpiozero import AngularServo
+
+def test_func1():
+    pass
+
+def test_func2():
+    pass
+
+def test_func3():
+    pass
