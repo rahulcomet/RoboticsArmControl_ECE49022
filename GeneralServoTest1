@@ -1,0 +1,26 @@
+import time
+import RPi.GPIO as GPIO
+
+PIN = 17
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(PIN, GPIO.OUT)
+
+p = GPIO.PWM(PIN, 50)
+p.start(2.5)
+
+#Using specific duty cycle values to control servo movement
+p.ChangeDutyCycle(2.5)
+time.sleep(1)
+p.ChangeDutyCycle(5)
+time.sleep(1)
+p.ChangeDutyCycle(7.25)
+time.sleep(1)
+p.ChangeDutyCycle(10)
+time.sleep(1)
+p.ChangeDutyCycle(12)
+time.sleep(1)
+p.ChangeDutyCycle(7.25)
+time.sleep(1)
+
+p.stop()
+GPIO.cleanup()
