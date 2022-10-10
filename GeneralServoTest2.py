@@ -7,7 +7,7 @@ factory = PiGPIOFactory()
 
 servo = AngularServo(PIN, min_pulse_width = 0.0005, max_pulse_width = 0.0025, pin_factory = factory)
 
-#Using preset values (min/mid/max) to manipulate servo movement
+#Using preset values (min/mid/max) to control servo movement
 print("middle")
 servo.mid()
 sleep(2)
@@ -24,7 +24,7 @@ print("mid again")
 servo.mid()
 sleep(2)
 
-#Using specific angle values to manipulate servo movement
+#Using specific angle values to control servo movement
 sleep(3)
 print("0")
 servo.angle = 0
