@@ -17,4 +17,4 @@ print("claw status: open again")
 servo.mid()
 sleep(2)
 
-servo.value = None
+servo.value = Nonehttps://github.com/rahulcomet/RoboticsArmControl_ECE49022/blob/main/ClawOC_ServoTest.py
