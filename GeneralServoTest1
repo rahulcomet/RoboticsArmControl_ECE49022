@@ -9,16 +9,27 @@ p = GPIO.PWM(PIN, 50)
 p.start(2.5)
 
 #Using specific duty cycle values to control servo movement
+print("PWM Duty Cycle set at: 2.5%")
 p.ChangeDutyCycle(2.5)
 time.sleep(1)
+
+print("PWM Duty Cycle set at: 5%")
 p.ChangeDutyCycle(5)
 time.sleep(1)
+
+print("PWM Duty Cycle set at: 7.25%")
 p.ChangeDutyCycle(7.25)
 time.sleep(1)
+
+print("PWM Duty Cycle set at: 10%")
 p.ChangeDutyCycle(10)
 time.sleep(1)
+
+print("PWM Duty Cycle set at: 12%")
 p.ChangeDutyCycle(12)
 time.sleep(1)
+
+print("PWM Duty Cycle set at: 7.25%")
 p.ChangeDutyCycle(7.25)
 time.sleep(1)
 

@@ -7,13 +7,13 @@ factory = PiGPIOFactory()
 
 servo = AngularServo(PIN, min_pulse_width = 0.0005, max_pulse_width = 0.0025, pin_factory = factory)
 
-print("open")
+print("claw status: open")
 servo.mid()
 sleep(2)
-print("close")
+print("claw status: close")
 servo.max()
 sleep(2)
-print("open again")
+print("claw status: open again")
 servo.mid()
 sleep(2)
 
