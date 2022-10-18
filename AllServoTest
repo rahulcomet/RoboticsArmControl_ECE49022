@@ -1,0 +1,108 @@
+from time import sleep
+from gpiozero import AngularServo
+from gpiozero.pins.pigpio import PiGPIOFactory
+#from adafruit_servokit import ServoKit
+
+factory = PiGPIOFactory()
+
+#kit = ServoKit(channels = 16)
+
+servo1 = AngularServo(17, min_pulse_width = 0.0005, max_pulse_width = 0.0025, pin_factory = factory)
+servo2 = AngularServo(18, min_pulse_width = 0.0005, max_pulse_width = 0.0025, pin_factory = factory)
+servo3 = AngularServo(22, min_pulse_width = 0.0005, max_pulse_width = 0.0025, pin_factory = factory)
+servo4 = AngularServo(23, min_pulse_width = 0.0005, max_pulse_width = 0.0025, pin_factory = factory)
+servo5 = AngularServo(24, min_pulse_width = 0.0005, max_pulse_width = 0.0025, pin_factory = factory)
+servo6 = AngularServo(16, min_pulse_width = 0.0005, max_pulse_width = 0.0025, pin_factory = factory)
+
+def user_input():   
+    gpiozero_stop(servo1)   
+    gpiozero_stop(servo2)   
+    gpiozero_stop(servo3)
+    gpiozero_stop(servo4)
+    gpiozero_stop(servo5)
+    gpiozero_stop(servo6)    
+
+    i = input("Choose from options below:\n 1. Test Arm Extension Servos\n 2. Test Claw Servos\n 3. Test Sweep Servo\n 4. Test adafruit system\n 5. Test incremental sweep\n Option: ")
+    
+    if i == "1":
+        test_func_ArmExtension()
+    elif i == "2":
+        test_func_ClawOCR()
+    elif i == "3":
+        test_func_Sweep()
+    elif i == "4":
+        test_func_adafruit()
+    elif i == "5":
+        test_func_incremental_sweep_gpiozero(servo1, 0, 10)
+        #test_func_incremental_sweep_adafruit(servo2, 0, 10)
+    else:
+        print("Choose one of the options!")
+
+def test_func_ArmExtension():
+    sleep(2)
+    #gpiozero_stop(servo2)
+
+    gpiozero_set(servo3, -15)
+    gpiozero_set(servo3, -30)
+    gpiozero_set(servo3, -45)
+    gpiozero_set(servo3, -60)
+    gpiozero_set(servo3, -90)
+    gpiozero_stop(servo3)
+
+    #gpiozero_set(servo4, 0)
+    #gpiozero_stop(servo4)
+
+    #gpiozero_set(servo5, 0)
+    #gpiozero_stop(servo5)
+
+def test_func_ClawOCR():
+
+    sleep(2)
+    gpiozero_set(servo1, 0) 
+    gpiozero_set(servo1, 90)
+    gpiozero_set(servo1, 0)
+    gpiozero_stop(servo1)
+    sleep(2)
+    gpiozero_set(servo2, 90)
+    gpiozero_set(servo2, -90)
+    gpiozero_set(servo2, 0)
+    gpiozero_stop(servo2)
+
+def test_func_Sweep():
+    sleep(2)
+    gpiozero_set(servo6, 90)
+    gpiozero_set(servo6, -90)
+    gpiozero_set(servo6, 90)
+    gpiozero_stop(servo6)
+
+def test_func_adafruit():
+    pass
+    '''sleep(2)
+    adafruit_set(0, 0)
+    adafruit_set(1, 0)
+    adafruit_set(2, 0)
+    adafruit_set(3, 0)
+    adafruit_set(4, 0)
+    adafruit_set(5, 0)'''
+
+def test_func_incremental_sweep_gpiozero(servo, rst_angle):
+    for i in range (0, 100, 10):
+        servo.angle = rst_angle + i 
+
+'''def test_func_incremental_sweep_adafruit(servo_ch, rst_angle):
+    for i in range (0, 190, 10):
+        kit.servo[servo_ch].angle = rst_angle + i
+        sleep(0.5)'''
+
+def gpiozero_set(servo, angle):
+    servo.angle = angle
+    sleep(1)
+
+def gpiozero_stop(servo):
+    servo.value = None
+
+'''def adafruit_set(servo_ch, angle):
+    kit.servo[servo_ch].angle = angle
+    sleep(1)'''
+
+user_input()
