@@ -1,0 +1,75 @@
+from time import sleep
+from adafruit_servokit import ServoKit
+
+kit = ServoKit(channels = 16)
+kit.servo[0].set_pulse_width_range(500, 2500)
+kit.servo[4].set_pulse_width_range(500, 2500)
+kit.servo[8].set_pulse_width_range(500, 2500)
+kit.servo[12].set_pulse_width_range(500, 2500)
+
+rst_angle0 = 90
+rst_angle1 = 90
+rst_angle2 = 45
+rst_angle3 = 45
+rst_angle4 = 60
+rst_angle5 = 0      #TBD                                              
+
+
+def user_input():   
+    i = input("Choose from options below:\n 1. Test Arm Extension Servo - 2\n 2. Test Arm Extension Servo - 3\n 3. Test Arm Extension Servo - 4\n 4. Test Sweep Servo - 5\n Option: ")
+    if i == 0:
+        test_func_incremental_sweep_adafruit(i, rst_angle2)
+    elif i == 1:
+        test_func_incremental_sweep_adafruit(i, rst_angle3)
+    elif i == 1:
+        test_func_incremental_sweep_adafruit(i, rst_angle4)
+    elif i == 1:
+        test_func_incremental_sweep_adafruit(i, rst_angle5)
+    else:
+        print("Enter 2-4 for ext servos or 5 for sweep servo")
+        user_input()
+
+def test_func_adafruit():
+    pass
+    sleep(2)
+    adafruit_set(0, 0)
+    adafruit_set(1, 0)
+    adafruit_set(2, 0)
+    adafruit_set(3, 0)
+    adafruit_set(4, 0)
+    adafruit_set(5, 0)
+
+def test_func_incremental_sweep_adafruit(servo_ch, curr_angle):
+    '''for i in range (0, 190, 10):
+        kit.servo[servo_ch].angle = rst_angle + i
+        sleep(0.5)'''
+    while True:
+        if status == 1:
+            curr_angle += 10
+            kit.servo[servo_ch].angle = curr_angle
+            sleep(0.5)
+            status = user_input()
+        elif status == -1:
+            curr_angle += 10
+            kit.servo[servo_ch].angle = curr_angle
+            sleep(0.5)
+            status = user_input()
+        else:
+            break
+
+def adafruit_set(servo_ch, angle):
+    kit.servo[servo_ch].angle = angle
+    sleep(1)
+
+def adafruit_rst():
+    kit.servo[0].angle = rst_angle0
+    kit.servo[3].angle = rst_angle1
+    kit.servo[4].angle = rst_angle2
+    kit.servo[7].angle = rst_angle3
+    kit.servo[8].angle = rst_angle4
+    kit.servo[11].angle = rst_angle5
+
+adafruit_rst()
+#kit.servo[8].angle = None                   #only for non LDX-218 (ext 2 & 3) servos
+print("Done")
+#user_input()
