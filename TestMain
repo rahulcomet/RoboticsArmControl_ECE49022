@@ -1,0 +1,184 @@
+import json
+from time import sleep
+#from square import *
+from adafruit_servokit import ServoKit
+
+kit = ServoKit(channels = 16)
+
+kit.servo[0].set_pulse_width_range(500, 2500)
+kit.servo[3].set_pulse_width_range(500, 2500)
+kit.servo[4].set_pulse_width_range(500, 2500)
+kit.servo[7].set_pulse_width_range(500, 2500)
+kit.servo[8].set_pulse_width_range(500, 2500)
+kit.servo[11].set_pulse_width_range(500, 2500)
+
+rst_angle0 = 90
+rst_angle1 = 90
+rst_angle2 = 45
+rst_angle3 = 45
+rst_angle4 = 55
+rst_angle5 = 0      #TBD                                             
+
+json_str = '{"X": -1, "Y": 1, "Z": 0, "ZC": 1, "OC": 1,"Reset": 1, "Rotate": 1}'
+
+def read_json(i):
+    j = json.loads(i)
+    return j
+
+def user_input():   
+    init_angle0 = rst_angle0
+    init_angle1 = rst_angle1
+    init_angle2 = rst_angle2
+    init_angle3 = rst_angle3
+    init_angle4 = rst_angle4
+    init_angle5 = rst_angle5
+    
+    while True:
+        i = input("Choose channel from options below:\n Test Claw OC - 0\n Test Claw Orientation - 1\n Test Arm Extension Servo1 - 2\n Test Arm Extension Servo2 - 3\n Test Arm Extension Servo3 - 4\n Test Sweep Servo - 5\n Option: ")
+        j = input("\nInstruction: ")
+        #j = read_json(json_str)
+        if i == "0":
+            test_func_OC(j)
+        elif i == "1":
+            test_func_rotate(j)
+        elif i == "2":
+            init_angle2 = test_func_ext1(j, init_angle2)
+        elif i == "3":
+            init_angle3 = test_func_ext2(j, init_angle3, init_angle2)
+        elif i == "4":
+            init_angle4 = test_func_ext3(j, init_angle4, init_angle3)
+        elif i == "5":
+            init_angle5 = test_func_sweep(j, init_angle5)
+        else:
+            adafruit_rst()
+            break
+
+def test_func_ext1(status, curr_angle):
+    while True:
+        if status == "1" or status == "N":    
+            curr_angle += 10
+            kit.servo[4].angle = curr_angle
+            print(curr_angle)
+            sleep(0.5)
+            status = input("\nInstruction:")
+        elif status == "-1" or status == "N": 
+            curr_angle -= 10
+            kit.servo[4].angle = curr_angle
+            print(curr_angle)
+            sleep(0.5)
+            status = input("\nInstruction: ")
+        else:
+            break
+    print(curr_angle)
+    return curr_angle
+
+def test_func_ext2(status, curr_angle, ext1_angle):
+    while True:
+        if status == "1" or status == "N":    
+            curr_angle += 10
+            ext1_angle += 10
+            kit.servo[7].angle = curr_angle
+            kit.servo[4].angle = ext1_angle
+            print(curr_angle)
+            sleep(0.5)
+            status = input("\nInstruction: ")
+        elif status == "-1" or status == "N": 
+            curr_angle -= 10
+            ext1_angle -= 10
+            kit.servo[7].angle = curr_angle
+            kit.servo[4].angle = ext1_angle
+            print(curr_angle)
+            sleep(0.5)
+            status = input("\nInstruction: ")
+        else:
+            break
+    print(curr_angle)
+    return curr_angle
+
+def test_func_ext3(status, curr_angle, ext2_angle):
+    while True:
+        if status == "1" or status == "N":    
+            curr_angle += 10
+            ext2_angle += 10
+            kit.servo[8].angle = curr_angle
+            kit.servo[7].angle = ext2_angle
+            print(curr_angle)
+            sleep(0.5)
+            status = input("\nInstruction: ")
+        elif status == "-1" or status == "N": 
+            curr_angle -= 10
+            ext2_angle -= 10
+            kit.servo[8].angle = curr_angle
+            kit.servo[7].angle = ext2_angle
+            print(curr_angle)
+            sleep(0.5)
+            status = input("\nInstruction: ")
+        else:
+            break
+    print(curr_angle)
+    return curr_angle
+
+def test_func_sweep(status, curr_angle):
+    while True:
+        if status == "1" or status == "N":              # N is placeholder for when nothing is received via ethernet()   
+            curr_angle += 10
+            kit.servo[11].angle = curr_angle
+            print(curr_angle)
+            sleep(0.5)
+            status = input("\nInstruction: ")
+        elif status == "-1" or status == "N":           # 1 and -1 are strings here since input() stores values as strings
+            curr_angle -= 10
+            kit.servo[11].angle = curr_angle
+            print(curr_angle)
+            sleep(0.5)
+            status = input("\nInstruction: ")
+        else:
+            break
+    print(curr_angle)
+    return curr_angle
+#Note: ext3 needs to update ext2 to keep ext1 on object and ext 2 needs to update ext1 to keep ext1 on object (1:1 for all angle updates)
+
+def test_func_OC(status): 
+    for i in range (100, 190, 10):
+        if status == "1":
+            kit.servo[0].angle = i
+            sleep(0.5)
+            status = input("\nInstruction: ")
+        else:
+            kit.servo[0].angle = rst_angle0
+
+def test_func_rotate(orientation):
+    if orientation == "1":
+        kit.servo[3].angle = 0
+    else:
+        kit.servo[3].angle = rst_angle1
+
+def adafruit_rst():
+    kit.servo[0].angle = rst_angle0
+    kit.servo[3].angle = rst_angle1
+    kit.servo[4].angle = rst_angle2
+    kit.servo[7].angle = rst_angle3
+    kit.servo[8].angle = rst_angle4
+    kit.servo[11].angle = rst_angle5
+
+def adafruit_set(servo_ch, angle):
+    kit.servo[servo_ch].angle = angle
+    sleep(1)
+
+def off():
+    kit.servo[0].angle = None
+    kit.servo[3].angle = None
+    kit.servo[4].angle = None
+    kit.servo[7].angle = None
+    kit.servo[8].angle = None
+    kit.servo[11].angle = None
+
+adafruit_rst()                 
+user_input()
+off()
+
+'''o1 = Square(5)
+print(o1.getVal())
+o2 = Add_Sub()
+print(o2.add(2, 3))
+print(o2.sub(2, 3))'''
